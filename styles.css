@@ -24,3 +24,13 @@ div {
 
 div:after {
 }
+
+.blackened {
+  background-color: black;
+}
+
+.flip-over {
+  position: absolute;
+  top: 0;
+  width: 25rem;
+}
