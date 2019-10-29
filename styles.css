@@ -17,6 +17,13 @@ body {
   padding-bottom: 100%; */
 }
 
+#timer {
+  position: absolute;
+  top: 0;
+  font-size: 7rem;
+  padding-left: 5rem;
+}
+
 div {
   border: 1px solid black;
   /* width: 50%; */
