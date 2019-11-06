@@ -24,6 +24,20 @@ body {
   padding-left: 5rem;
 }
 
+#input_grid {
+  position: absolute;
+  top: 23rem;
+  font-size: 2rem;
+  padding-left: 5rem;
+}
+
+#input_squares {
+  position: absolute;
+  top: 30rem;
+  font-size: 2rem;
+  padding-left: 5rem;
+}
+
 div {
   border: 1px solid black;
   /* width: 50%; */

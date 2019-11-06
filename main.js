@@ -168,10 +168,10 @@ CountDownTimer.parse = function(seconds) {
 var display = document.querySelector("#timer"),
   timer = new CountDownTimer(10);
 
-timer
-  .onTick(format)
-  .onTick(restart)
-  .start();
+// timer
+//   .onTick(format)
+//   .onTick(restart)
+//   .start();
 
 function restart() {
   console.log(this.timesExpired);
@@ -191,6 +191,19 @@ function format(minutes, seconds) {
   seconds = seconds < 10 ? "0" + seconds : seconds;
   display.textContent = minutes + ":" + seconds;
 }
+
+const numSquares = document.querySelector("#input_squares");
+const numGrid = document.querySelector("#input_grid");
+
+// TODO: debounce?
+numSquares.addEventListener("input", e => {
+  // reset before filling in
+  fillIn(e.target.value);
+});
+
+numGrid.addEventListener("input", e => {
+  initGrid(e.target.value);
+});
 
 initGrid(5);
 fillIn(5);
