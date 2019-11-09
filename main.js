@@ -1,8 +1,10 @@
+import CountDownTimer from "/timer.js";
+
 const container = document.querySelector(".container");
 
 // init grid
 function initGrid(dimension) {
-  for (i = 0; i < dimension * dimension; i++) {
+  for (let i = 0; i < dimension * dimension; i++) {
     let elem = document.createElement("div");
     container.appendChild(elem);
   }
@@ -26,10 +28,10 @@ function fillIn(num) {
     }
   }
 
-  console.log(randomIndexes);
+  // console.log(randomIndexes);
 
-  for (i = 0; i < randomIndexes.length; i++) {
-    console.log(randomIndexes[i]);
+  for (let i = 0; i < randomIndexes.length; i++) {
+    // console.log(randomIndexes[i]);
     allSquares[randomIndexes[i]].classList.add("blackened");
   }
 
@@ -39,7 +41,7 @@ function fillIn(num) {
 // flip over
 function flipOver() {
   let filledIn = document.querySelectorAll(".blackened");
-  for (i = 0; i < filledIn.length; i++) {
+  for (let i = 0; i < filledIn.length; i++) {
     filledIn[i].classList.remove("blackened");
   }
 }
@@ -49,14 +51,14 @@ function collectGuess(numBlackened, randomIndexes) {
   const guesses = [];
   let squared = numBlackened * numBlackened;
   container.addEventListener("click", e => {
-    console.log(e.target);
+    // console.log(e.target);
     if (guesses.length < numBlackened) {
       // only push unique squares clicked
       if (guesses.indexOf(indexOfNodeList(e.target, squared)) === -1) {
         guesses.push(indexOfNodeList(e.target, squared));
       }
       e.target.classList.add("blackened");
-      console.log(guesses);
+      // console.log(guesses);
     }
 
     if (guesses.length === numBlackened) {
@@ -64,9 +66,12 @@ function collectGuess(numBlackened, randomIndexes) {
       let ascendingGuesses = guesses.sort((a, b) => a - b);
       let ascendingIndexes = randomIndexes.sort((a, b) => a - b);
 
-      console.log(ascendingGuesses, ascendingIndexes);
+      // console.log(ascendingGuesses, ascendingIndexes);
       if (arraysEqual(ascendingGuesses, ascendingIndexes)) {
         alert("CORRECT");
+        // reset clock
+
+        // next level
       } else {
         alert("WRONG");
         // show correct
@@ -79,7 +84,7 @@ function collectGuess(numBlackened, randomIndexes) {
 
 // index Of selection in NodeList
 function indexOfNodeList(element, squared) {
-  for (i = 0; i < squared; i++) {
+  for (let i = 0; i < squared; i++) {
     if (document.querySelectorAll(".container > div")[i] == element) {
       return i;
     }
@@ -96,7 +101,7 @@ function arraysEqual(a, b) {
   // Please note that calling sort on an array will modify that array.
   // you might want to clone your array first.
 
-  for (var i = 0; i < a.length; ++i) {
+  for (let i = 0; i < a.length; ++i) {
     if (a[i] !== b[i]) return false;
   }
   return true;
@@ -108,65 +113,9 @@ function arraysEqual(a, b) {
 
 // next level
 
-// timer
-function CountDownTimer(duration, granularity) {
-  this.duration = duration;
-  this.granularity = granularity || 1000;
-  this.tickFtns = [];
-  this.running = false;
-}
-
-CountDownTimer.prototype.start = function() {
-  if (this.running) {
-    return;
-  }
-  this.running = true;
-  var start = Date.now(),
-    that = this,
-    diff,
-    obj;
-
-  (function timer() {
-    diff = that.duration - (((Date.now() - start) / 1000) | 0);
-
-    if (diff > 0) {
-      setTimeout(timer, that.granularity);
-    } else {
-      diff = 0;
-      that.running = false;
-    }
-
-    obj = CountDownTimer.parse(diff);
-    that.tickFtns.forEach(function(ftn) {
-      ftn.call(this, obj.minutes, obj.seconds);
-    }, that);
-  })();
-};
-
-CountDownTimer.prototype.onTick = function(ftn) {
-  if (typeof ftn === "function") {
-    this.tickFtns.push(ftn);
-  }
-  return this;
-};
-
-CountDownTimer.prototype.expired = function() {
-  return !this.running;
-};
-
-CountDownTimer.prototype.timesExpired = 0;
-
-CountDownTimer.parse = function(seconds) {
-  return {
-    minutes: (seconds / 60) | 0,
-    seconds: seconds % 60 | 0
-  };
-};
-
 // Create new Timer
-
-var display = document.querySelector("#timer"),
-  timer = new CountDownTimer(10);
+const display = document.querySelector("#timer"),
+  timer = new CountDownTimer(3);
 
 // timer
 //   .onTick(format)
@@ -178,6 +127,9 @@ function restart() {
   if (this.timesExpired == 2) {
     this.running = false;
     alert("TIME OUT");
+    this.timesExpired = 0;
+    // initGrid(5);
+    // fillIn(5);
   } else if (this.expired()) {
     flipOver();
     this.timesExpired++;
@@ -195,13 +147,21 @@ function format(minutes, seconds) {
 const numSquares = document.querySelector("#input_squares");
 const numGrid = document.querySelector("#input_grid");
 
+function reInitGrid() {
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+}
+
 // TODO: debounce?
 numSquares.addEventListener("input", e => {
   // reset before filling in
+  reInitGrid();
   fillIn(e.target.value);
 });
 
 numGrid.addEventListener("input", e => {
+  reInitGrid();
   initGrid(e.target.value);
 });
 
